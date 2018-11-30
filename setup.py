@@ -1,16 +1,21 @@
-from distutils.core import setup
+import setuptools
 
-NAME = 'Insight'
-DESCRIPTION = open('README.md').read()
-URL = 'https://github.com/becksteadn/iprep'
-EMAIL = 'nathaniel@scriptingis.life'
-VERSION = None
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
-REQUIRED = ['requests', 'argparse', 'PTable']
-
-setup(
-    name=NAME,
-    version=VERSION,
-    packages=['insight'],
-    long_description=DESCRIPTION,
+setuptools.setup(
+    name="insight",
+    version="0.0.1",
+    author="Nathaniel Beckstead",
+    author_email="nathaniel@scriptingis.life",
+    description="Aids in profiling an IP or domain name by searching online services.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/becksteadn/insight",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
 )
