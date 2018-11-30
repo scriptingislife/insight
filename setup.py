@@ -11,7 +11,7 @@ shodan_key:
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-class PostInstallCommand(install):
+class PreInstallCommand(install):
     def run(self):
         conf_file = os.path.join(os.path.expanduser("~"), ".insight")
         if not os.path.isfile(conf_file):
@@ -37,6 +37,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    cmdclass={'install':PostInstallCommand},
+    cmdclass={'install':PreInstallCommand},
     entry_points = {'console_scripts': ['insight=insight.insight:main']},
 )
