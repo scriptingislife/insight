@@ -7,6 +7,7 @@
 import yaml
 import argparse
 import socket
+import os
 
 import censys
 import greynoise
@@ -27,9 +28,15 @@ def main():
     target = socket.gethostbyname(args.target)
     target = args.target
 
-    with open('insight.yml', 'r') as f:
-        conf = yaml.safe_load(f)
-    
+    conf = None
+    for cfile in '.insight', 'insight.yml':
+        for loc in os.path.expanduser("~"), os.curdir, os.environ.get("INSIGHT_CONF"):
+            try:
+                with open(os.path.join(loc, cfile), 'r') as f:
+                    conf = yaml.safe_load(f)
+            except IOError:
+                pass
+
     if args.censys:
         censys.lookup(target, conf['censys_uid'], conf['censys_secret'])
     if args.greynoise:
