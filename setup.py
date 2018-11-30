@@ -1,7 +1,26 @@
 import setuptools
+from setuptools.command.install import install
+import os
+
+CONF_CONTENT = """---
+censys_uid: 
+censys_secret: 
+shodan_key: 
+"""
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
+
+class PostInstallCommand(install):
+    def run(self):
+        conf_file = os.path.join(os.path.expanduser("~"), ".insight")
+        if not os.path.isfile(conf_file):
+            print("Creating configuration file at {}".format(conf_file))
+            with open(conf_file, 'w') as f:
+                f.write(CONF_CONTENT)
+        else:
+            print("Configuration file .insight exists. Skipping creation...")
+        install.run(self)
 
 setuptools.setup(
     name="insight",
@@ -18,5 +37,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    cmdclass={'install':PostInstallCommand},
     entry_points = {'console_scripts': ['insight=insight.insight:main']},
 )

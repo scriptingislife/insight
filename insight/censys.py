@@ -1,3 +1,10 @@
+#
+# Censys
+# ------
+# - Gather certificate information
+#
+# parsed.names:meadowviewof.gq and parsed.validity.end:[2018-11-29 TO *]
+#
 import common
 import requests
 from prettytable import PrettyTable

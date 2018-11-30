@@ -1,5 +1,4 @@
 #
-# TODO: 1 character arguments for each service
 #
 #
 #
@@ -34,7 +33,7 @@ def main():
             try:
                 with open(os.path.join(loc, cfile), 'r') as f:
                     conf = yaml.safe_load(f)
-            except IOError, AttributeError:
+            except (IOError, AttributeError, TypeError):
                 pass
 
     if args.censys:
@@ -50,9 +49,15 @@ def main():
 
     # Default operation
     if not any([args.censys, args.greynoise, args.shodan, args.talos, args.urlscan]):
-        censys.lookup(target, conf['censys_uid'], conf['censys_secret'])
+        try:
+            censys.lookup(target, conf['censys_uid'], conf['censys_secret'])
+        except TypeError:
+            print("Couldn't find Insight configuration file. Skipping Censys...")
         greynoise.lookup(target)
-        shodan.lookup(target, conf['shodan_key'])
+        try:
+            shodan.lookup(target, conf['shodan_key'])
+        except TypeError:
+            print("Couldn't find Insight configuration file. Skipping Shodan...")
         talos.lookup(target)
         urlscan.lookup(target)
 
