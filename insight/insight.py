@@ -34,7 +34,7 @@ def main():
             try:
                 with open(os.path.join(loc, cfile), 'r') as f:
                     conf = yaml.safe_load(f)
-            except IOError:
+            except IOError, AttributeError:
                 pass
 
     if args.censys:
