@@ -43,9 +43,8 @@ def lookup(target):
     blacklists = 0
     for blist in data["blacklists"]:
         if len(data["blacklists"][blist]["rules"]) > 0:
-            print(len(data["blacklists"][blist]["rules"]))
-        else:
-            print(len(data["blacklists"][blist]["rules"]))
+            blacklists = blacklists + 1
+            #print(len(data["blacklists"][blist]["rules"]))
 
     table.add_row([data["ip"], category, data["email_score_name"], data["web_score_name"], blacklists])
     print(common.bcolors.OKBLUE + str(table) + common.bcolors.ENDC)

@@ -14,6 +14,8 @@ I started this project the day NASA's [InSight Mars Lander](https://mars.nasa.go
 
 I'm working on packaging, but in the mean time you can run it with these steps.
 
+**Prerequisite** Install virtualenv with `pip install virtualenv`
+
 `git clone https://github.com/becksteadn/insight.git && cd insight`
 
 `virtualenv .env`
