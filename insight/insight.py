@@ -24,8 +24,10 @@ def main():
     parser.add_argument('--urlscan', '-u', action='store_true')
     args = parser.parse_args()
     
-    target = socket.gethostbyname(args.target)
-    target = args.target
+    try:
+        target = socket.gethostbyname(args.target)
+    except socket.gaierror:
+        target = args.target
 
     conf = None
     for cfile in '.insight', 'insight.yml':

@@ -1,11 +1,15 @@
 # Functions and properties shared between modules
 import socket
+import time
 
 def ipfromhost(target):
     return socket.gethostbyname(target)
 
 def hostfromip(target):
     return socket.gethostbyaddr(target)
+
+def sleep(amt):
+    time.sleep(amt)
 
 class bcolors:
     HEADER = '\033[95m'
