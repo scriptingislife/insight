@@ -12,10 +12,66 @@ import common
 import requests
 from prettytable import PrettyTable
 
+def whois(target):
+    target_is_ip = common.isip(target)
+
+    req_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0', 'Referer': 'https://talosintelligence.com'}
+    req_data = {'offset': 0, 'order': 'ip asc', 'query': '/api/v2/whois/', 'query_entry': target}
+    response = requests.get('https://talosintelligence.com/sb_api/query_lookup', headers=req_headers, data=req_data)
+    if response.status_code != 201:
+        print('Got status {} from Talos WHOIS. Skipping...'.format(response.status_code))
+        return None
+    
+    data = response.json()
+    try:
+        if data["error"]:
+            print('Talos returned error: {}'.format(data["error"]))
+            return None
+    except KeyError:
+        pass
+
+    data = response.json()['data'].replace('\r', '').split('\n')
+    
+    table = PrettyTable()
+    if target_is_ip:
+        table.field_names = ["WHOIS IP", "Creation Date", "Last Updated", "Registrar"]
+    else:
+        table.field_names = ["WHOIS", "Creation Date", "Expiry Date", "Registrar"]
+
+    create_date = ""
+    expire_date = ""
+    registrar = ""
+    for line in data:
+        if target_is_ip:
+#            if "NetRange" in line:
+#                net_range = line[line.index(':')+1:].strip()
+            if "RegDate:" in line:
+                create_date = line[line.index(':')+1:].strip()
+            elif "Updated" in line:
+                expire_date = line[line.index(':')+1:].strip()
+            elif "OrgName" in line:
+                registrar = line[line.index(':')+1:].strip()
+        else:
+            if "Creation Date:" in line:
+                create_date = line[line.index(':')+1:line.rfind('T')].strip()
+            elif "Registry Expiry Date:" in line:
+                expire_date = line[line.index(':')+1:line.rfind('T')].strip()
+            elif "Registrar:" in line:
+                registrar = line[line.index(':')+1:].strip()
+            if create_date != "" and expire_date != "" and registrar != "":
+                break
+
+    table.add_row([target, create_date, expire_date, registrar])
+    print(common.bcolors.OKBLUE + str(table) + common.bcolors.ENDC)
+
+
+
 def lookup(target):
     # Host: /api/v2/details/host/
     # IP: /api/v2/details/ip/ 
-    #target = common.ipfromhost(target)
+    
+    if not common.isip(target):
+        target = common.ipfromhost(target)
 
     req_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0', 'Referer': 'https://talosintelligence.com'}
     req_data = {'query': '/api/v2/details/ip/', 'query_entry': target}
@@ -25,6 +81,7 @@ def lookup(target):
         return None
 
     data = response.json()
+
     try:
         if data["error"]:
             print('Talos returned error: {}'.format(data["error"]))
@@ -35,10 +92,12 @@ def lookup(target):
     table = PrettyTable()
     table.field_names = ["Talos Intelligence", "Category", "Email Score", "Web Score", "Blacklists"]
 
-    if data["category"]:
-        category = data["category"]['description']
-    else:
-        category = ""
+    category = ""
+    try:
+        if data["category"]:
+            category = data["category"]['description']
+    except KeyError:
+        pass
 
     blacklists = 0
     for blist in data["blacklists"]:

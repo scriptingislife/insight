@@ -7,6 +7,9 @@ def lookup(target, key):
         print('Missing Shodan API key. Skipping...')
         return None
 
+    if not common.isip(target):
+        target = common.ipfromhost(target)
+
     response = requests.get('https://api.shodan.io/shodan/host/{}?key={}'.format(target, key))
     if response.status_code != 200:
         print('Got status {} from Shodan. Skipping...'.format(response.status_code))

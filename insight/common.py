@@ -1,12 +1,18 @@
 # Functions and properties shared between modules
 import socket
 import time
+import re
 
 def ipfromhost(target):
     return socket.gethostbyname(target)
 
 def hostfromip(target):
     return socket.gethostbyaddr(target)
+
+def isip(target):
+    regex = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
+    return regex.match(target) is not None
+
 
 def sleep(amt):
     time.sleep(amt)

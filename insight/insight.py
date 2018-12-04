@@ -24,10 +24,11 @@ def main():
     parser.add_argument('--urlscan', '-u', action='store_true')
     args = parser.parse_args()
     
-    try:
-        target = socket.gethostbyname(args.target)
-    except socket.gaierror:
-        target = args.target
+    target = args.target
+    #try:
+        #target = socket.gethostbyname(args.target)
+    #except socket.gaierror:
+    #    target = args.target
 
     conf = None
     for cfile in '.insight', 'insight.yml':
@@ -46,6 +47,7 @@ def main():
         shodan.lookup(target, conf['shodan_key'])
     if args.talos:
         talos.lookup(target)
+        talos.whois(target)
     if args.urlscan:
         urlscan.lookup(target)
 
