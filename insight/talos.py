@@ -34,9 +34,9 @@ def whois(target):
     
     table = PrettyTable()
     if target_is_ip:
-        table.field_names = ["WHOIS IP", "Creation Date", "Last Updated", "Registrar"]
+        table.field_names = ["WHOIS IP Space", "Creation Date", "Last Updated", "Registrar"]
     else:
-        table.field_names = ["WHOIS", "Creation Date", "Expiry Date", "Registrar"]
+        table.field_names = ["WHOIS Domain", "Creation Date", "Expiry Date", "Registrar"]
 
     create_date = ""
     expire_date = ""
@@ -67,14 +67,15 @@ def whois(target):
 
 
 def lookup(target):
-    # Host: /api/v2/details/host/
-    # IP: /api/v2/details/ip/ 
-    
-    if not common.isip(target):
-        target = common.ipfromhost(target)
+    target = common.ipfromhost(target)
+    API_PATH = '/api/v2/details/ip/'
+    #if not common.isip(target):
+    #    API_PATH = '/api/v2/details/domain/'
+    #else:
+    #    API_PATH = '/api/v2/details/ip/'
 
     req_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0', 'Referer': 'https://talosintelligence.com'}
-    req_data = {'query': '/api/v2/details/ip/', 'query_entry': target}
+    req_data = {'query': API_PATH, 'query_entry': target}
     response = requests.get('https://talosintelligence.com/sb_api/query_lookup', headers=req_headers, data=req_data)
     if response.status_code != 201:
         print('Got status {} from Talos. Skipping...'.format(response.status_code))
