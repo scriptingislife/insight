@@ -3,10 +3,7 @@
 # ------
 # - Gather certificate information
 #
-# parsed.names:meadowviewof.gq and parsed.validity.end:[2018-11-29 TO *]
 #
-# Shodan - 6e283622f12bd8a23684146a6d002cd847c1e7c5753fd2c1ca2c989b8d1ed204
-# Single - 6336c9a6f9a96d773b1cca3bf1ea3ad00788a4ef21e05913e442b1cbe8a3152f
 import common
 import requests
 from prettytable import PrettyTable
@@ -24,7 +21,7 @@ def raw_cert(id, uid, secret):
     return response.json()
 
 
-def lookup(target, uid, secret):
+def lookup(target, uid, secret, color=common.bcolors.WARNING):
     if uid is None or secret is None:
         print('Missing Censys API UID or secret. Skipping...')
         return None
@@ -70,4 +67,4 @@ def lookup(target, uid, secret):
         table.add_row(['...', '...', '...', '...', '...'])
     table.add_row(['Total Results', data['metadata']['count'], "", "", ""])
 
-    print(common.bcolors.WARNING + str(table) + common.bcolors.ENDC)
+    print(color + str(table) + common.bcolors.ENDC)

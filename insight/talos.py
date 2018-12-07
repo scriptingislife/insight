@@ -12,7 +12,7 @@ import common
 import requests
 from prettytable import PrettyTable
 
-def whois(target):
+def whois(target, color=common.bcolors.OKBLUE):
     target_is_ip = common.isip(target)
 
     req_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0', 'Referer': 'https://talosintelligence.com'}
@@ -62,11 +62,11 @@ def whois(target):
                 break
 
     table.add_row([target, create_date, expire_date, registrar])
-    print(common.bcolors.OKBLUE + str(table) + common.bcolors.ENDC)
+    print(color + str(table) + common.bcolors.ENDC)
 
 
 
-def lookup(target):
+def lookup(target, color=common.bcolors.OKBLUE):
     target = common.ipfromhost(target)
     API_PATH = '/api/v2/details/ip/'
     #if not common.isip(target):
@@ -107,4 +107,4 @@ def lookup(target):
             #print(len(data["blacklists"][blist]["rules"]))
 
     table.add_row([data["ip"], category, data["email_score_name"], data["web_score_name"], blacklists])
-    print(common.bcolors.OKBLUE + str(table) + common.bcolors.ENDC)
+    print(color + str(table) + common.bcolors.ENDC)

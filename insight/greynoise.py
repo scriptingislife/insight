@@ -7,7 +7,7 @@ import common
 import requests
 from prettytable import PrettyTable
 
-def lookup(target):
+def lookup(target, color=common.bcolors.OKGREEN):
     target = common.ipfromhost(target)
 
     response = requests.post('http://api.greynoise.io:8888/v1/query/ip', data={'ip': target})
@@ -25,4 +25,4 @@ def lookup(target):
     else:
         table.field_names = ["Grey Noise", "Status"]
         table.add_row([data['ip'], data['status']])
-    print(common.bcolors.OKGREEN + str(table) + common.bcolors.ENDC)
+    print(color + str(table) + common.bcolors.ENDC)
