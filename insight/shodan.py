@@ -17,9 +17,19 @@ def lookup(target, key, color=common.bcolors.FAIL):
     data = response.json()
 
     table = PrettyTable()
-    table.field_names = ["Shodan", "Country", "Ports"]
-    table.add_row([data["ip_str"], data["country_name"], ""])
-    for port in data["ports"]:
-        table.add_row(["", "", port])
+    table.field_names = ["Shodan", "Country", "Port", "Service"]
+    table.add_row([data["ip_str"], data["country_name"], "", ""])
+    for service in data["data"]:
+        try:
+            service_str = service["product"]
+        except KeyError:
+            #try:
+            #    if service["http"]:
+            #        service_str = "HTTP"
+            #except KeyError:
+            #    service_str = ""
+            service_str = service["_shodan"]["module"]
+
+        table.add_row(["", "", service["port"], service_str])
 
     print(color + str(table) + common.bcolors.ENDC)
