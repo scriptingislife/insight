@@ -26,6 +26,12 @@ I'm working on packaging, but in the mean time you can run it with these steps.
 
 `cd insight`
 
-**Optional** Add your Censys and Shodan keys to `insight.yml`
+**Optional** Add your Censys and Shodan keys to `insight.yml` as
+
+```
+censys_uid: 
+censys_secret: 
+shodan_key: 
+```
 
 `python insight.py [host]`
