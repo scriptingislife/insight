@@ -1,6 +1,6 @@
 # insight
 
- Identifying a host with just an IP or domain name is nearly impossible. Insight searches several online services for information about a host. It pulls service and location data from [Shodan](https://www.shodan.io/), certificate data from [Censys](https://censys.io/), and queries [GreyNoise](https://greynoise.io/) just to name a few.
+ Identifying a host with just an IP or domain name is nearly impossible. Insight searches several online services for information about a host. It pulls service and location data from [Shodan](https://www.shodan.io/), certificate data from [Censys](https://censys.io/), and spam/reputation data from [Talos](https://www.talosintelligence.com/) just to name a few.
 
 ## Background
 
