@@ -13,11 +13,13 @@ import greynoise
 import shodan
 import talos
 import urlscan
+import crtsh
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('target', help='the ip address or domain to look up')
     parser.add_argument('--censys', '-c', action='store_true')
+    parser.add_argument('--subdomains', '-d', action='store_true')
     parser.add_argument('--greynoise', '-g', action='store_true')
     parser.add_argument('--shodan', '-s', action='store_true')
     parser.add_argument('--talos', '-t', action='store_true')
@@ -50,9 +52,11 @@ def main():
         talos.whois(target)
     if args.urlscan:
         urlscan.lookup(target)
+    if args.subdomains:
+        crtsh.lookup(target)
 
     # Default operation
-    if not any([args.censys, args.greynoise, args.shodan, args.talos, args.urlscan]):
+    if not any([args.censys, args.greynoise, args.shodan, args.talos, args.urlscan, args.subdomains]):
         try:
             censys.lookup(target, conf['censys_uid'], conf['censys_secret'])
         except TypeError:
@@ -64,6 +68,7 @@ def main():
             print("Couldn't find Insight configuration file. Skipping Shodan...")
         talos.lookup(target)
         urlscan.lookup(target)
+        crtsh.lookup(target)
 
     
 
