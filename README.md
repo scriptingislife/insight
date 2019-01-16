@@ -26,7 +26,7 @@ I'm working on packaging, but in the mean time you can run it with these steps.
 
 `cd insight`
 
-**Optional** Add your Censys and Shodan keys to `insight.yml` as
+**Optional** Add your Censys and Shodan keys to `~/.insight` as
 
 ```
 censys_uid: 
