@@ -17,10 +17,11 @@ def lookup(target, color=common.bcolors.OKGREEN):
 
     table = PrettyTable()
     table.field_names = ['Enumerated Subdomains']
-    for domain in sorted(subdomains):
+
+    for domain in sorted(subdomains)[:ROW_LIMIT]:
         table.add_row([domain])
-    # TODO: Row limits. Set not subscriptable.
-    #if len(subdomains) > 20:
-    #    table.add_row(['...'])
+
+    if len(subdomains) > ROW_LIMIT:
+        table.add_row(['+{} MORE'.format(len(subdomains) - ROW_LIMIT)])
 
     print(color + str(table) + common.bcolors.ENDC)

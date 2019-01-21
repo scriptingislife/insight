@@ -15,6 +15,8 @@ def raw_cert(id, uid, secret):
     API_PATH = '/view/certificates/{}'.format(id)
     response = requests.get(API_URL + API_PATH, auth=(uid, secret))
     if response.status_code != 200:
+        if response.status_code == 404:
+            return None
         print('Got status {} from Censys Certificates. Skipping...'.format(response.status_code))
         print(response.json()['error'])
         return None
@@ -40,6 +42,8 @@ def lookup(target, uid, secret, color=common.bcolors.WARNING):
 
     for cert in data['results'][:5]:
         cert_data = raw_cert(cert['parsed.fingerprint_sha256'], uid, secret)
+        if cert_data is None:
+            continue
 
         cert_names = cert_data['parsed']['names']
         cert_names_len = len(cert_names)
